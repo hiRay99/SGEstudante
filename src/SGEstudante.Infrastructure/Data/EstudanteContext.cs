@@ -60,50 +60,76 @@ namespace SGEstudante.Infrastructure.Data
                 .HasForeignKey(c=> c.EstudanteId)
                 .HasPrincipalKey(c=> c.EstudanteId);
 
-            modelBuilder.Entity<Contato>().Property(e => e.Nome)
+            modelBuilder.Entity<Contato>().Property(c => c.Nome)
             .HasColumnType("varchar(200)")
             .IsRequired();
 
-            modelBuilder.Entity<Contato>().Property(e => e.Email)
+            modelBuilder.Entity<Contato>().Property(c => c.Email)
             .HasColumnType("varchar(100)")
             .IsRequired();
 
-            modelBuilder.Entity<Contato>().Property(e => e.Telefone)
+            modelBuilder.Entity<Contato>().Property(c => c.Telefone)
             .HasColumnType("varchar(15)");
 
             #endregion
 
             #region Configuração de Curso
 
-            modelBuilder.Entity<Curso>().Property(e => e.Materia)
+            modelBuilder.Entity<Curso>().Property(cs => cs.Materia)
             .HasColumnType("varchar(400)")
             .IsRequired();
 
-            modelBuilder.Entity<Curso>().Property(e => e.Codigo)
+            modelBuilder.Entity<Curso>().Property(cs => cs.Codigo)
             .HasColumnType("varchar(10)")
             .IsRequired();
 
-            modelBuilder.Entity<Curso>().Property(e => e.Descricao)
+            modelBuilder.Entity<Curso>().Property(cs => cs.Descricao)
             .HasColumnType("varchar(1000)")
             .IsRequired();
 
             #endregion
 
             #region Configuração de Endereço
-            modelBuilder.Entity<Endereco>().Property(e => e.Lougradouro)
+            modelBuilder.Entity<Endereco>().Property(en => en.Lougradouro)
             .HasColumnType("varchar(200)")
             .IsRequired();
 
-            modelBuilder.Entity<Endereco>().Property(e => e.Bairro)
+            modelBuilder.Entity<Endereco>().Property(en => en.Bairro)
             .HasColumnType("varchar(200)")
             .IsRequired();
 
-            modelBuilder.Entity<Endereco>().Property(e => e.CPE)
+            modelBuilder.Entity<Endereco>().Property(en => en.CPE)
             .HasColumnType("varchar(15)")
             .IsRequired();
 
-            modelBuilder.Entity<Endereco>().Property(e => e.Referencia)
+            modelBuilder.Entity<Endereco>().Property(en => en.Referencia)
             .HasColumnType("varchar(400)");
+
+            #endregion
+
+            #region Configuração de Curso Estudante
+
+            modelBuilder.Entity<CursoEstudante>()
+                .HasKey(ce => ce.Id);
+
+            modelBuilder.Entity<CursoEstudante>()
+                .HasOne(ce => ce.Estudante)
+                .WithMany(ce => ce.CursosEstudante)
+                .HasForeignKey(ce => ce.EstudanteId);
+
+            modelBuilder.Entity<CursoEstudante>()
+                .HasOne(ce => ce.Curso)
+                .WithMany(ce => ce.CursosEstudante)
+                .HasForeignKey(ce => ce.CursoId);
+
+            #endregion
+
+            #region Configurações de Menu
+
+            modelBuilder.Entity<Menu>()
+                .HasMany(m => m.SubMenu)
+                .WithOne()
+                .HasForeignKey(m => m.MenuId);
 
             #endregion
         }
