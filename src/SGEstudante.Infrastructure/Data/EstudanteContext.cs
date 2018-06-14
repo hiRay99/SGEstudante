@@ -23,8 +23,20 @@ namespace SGEstudante.Infrastructure.Data
         {
             modelBuilder.Entity<Estudante>().ToTable("Estudante");
             modelBuilder.Entity<Contato>().ToTable("Contato");
+            modelBuilder.Entity<Curso>().ToTable("Curso");
+            modelBuilder.Entity<Endereco>().ToTable("Endereco");
+            modelBuilder.Entity<CursoEstudante>().ToTable("CursoEstudante");
 
             #region Configuração de Estudante
+
+            modelBuilder.Entity<Estudante>()
+                .HasKey(e=> e.EstudanteId);
+
+            modelBuilder.Entity<Estudante>()
+                .HasMany(e=> e.Contatos)
+                .WithOne(e=> e.Estudante)
+                .HasForeignKey(e=> e.EstudanteId)
+                .HasPrincipalKey(e=> e.EstudanteId);
 
             modelBuilder.Entity<Estudante>().Property(e => e.CPF)
             .HasColumnType("varchar(11)")
@@ -41,6 +53,12 @@ namespace SGEstudante.Infrastructure.Data
             #endregion
 
             #region Configuração de Contato
+
+            modelBuilder.Entity<Contato>()
+                .HasOne(c => c.Estudante)
+                .WithMany(c=> c.Contatos)
+                .HasForeignKey(c=> c.EstudanteId)
+                .HasPrincipalKey(c=> c.EstudanteId);
 
             modelBuilder.Entity<Contato>().Property(e => e.Nome)
             .HasColumnType("varchar(200)")
@@ -72,6 +90,20 @@ namespace SGEstudante.Infrastructure.Data
             #endregion
 
             #region Configuração de Endereço
+            modelBuilder.Entity<Endereco>().Property(e => e.Lougradouro)
+            .HasColumnType("varchar(200)")
+            .IsRequired();
+
+            modelBuilder.Entity<Endereco>().Property(e => e.Bairro)
+            .HasColumnType("varchar(200)")
+            .IsRequired();
+
+            modelBuilder.Entity<Endereco>().Property(e => e.CPE)
+            .HasColumnType("varchar(15)")
+            .IsRequired();
+
+            modelBuilder.Entity<Endereco>().Property(e => e.Referencia)
+            .HasColumnType("varchar(400)");
 
             #endregion
         }
